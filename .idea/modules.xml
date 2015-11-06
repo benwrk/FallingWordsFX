@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/FallingWordsFX.iml" filepath="$PROJECT_DIR$/FallingWordsFX.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FallingWordsFXBase/FallingWordsFXBase.iml" filepath="$PROJECT_DIR$/FallingWordsFXBase/FallingWordsFXBase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FallingWordsFXClient/FallingWordsFXClient.iml" filepath="$PROJECT_DIR$/FallingWordsFXClient/FallingWordsFXClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FallingWordsFXServer/FallingWordsFXServer.iml" filepath="$PROJECT_DIR$/FallingWordsFXServer/FallingWordsFXServer.iml" />
+    </modules>
+  </component>
+</project>
