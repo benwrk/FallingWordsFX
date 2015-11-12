@@ -4,8 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="450.0" minWidth="800.0" prefHeight="450.0"
-      prefWidth="800.0"
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="450.0" minWidth="800.0" prefHeight="450.0" prefWidth="800.0"
       xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="co.bwsc.fallingwordsfx.client.gui.Game">
     <children>
@@ -58,8 +57,17 @@
         <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="600.0"
               style="-fx-background-color: #5555FF;" VBox.vgrow="NEVER">
             <children>
-                <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="input" onAction="#handleInputAction"/>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Button mnemonicParsing="false" text="Ready">
+                            <HBox.margin>
+                                <Insets left="8.0"/>
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+                <TextField fx:id="input" alignment="CENTER" disable="true" onAction="#handleInputAction"
+                           promptText="Get ready..."/>
                 <Pane maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
             </children>
         </HBox>

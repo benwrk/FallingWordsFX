@@ -18,9 +18,6 @@ public class Game extends Application {
     }
 
     @FXML
-    private Parent root;
-
-    @FXML
     private Label localScore;
 
     @FXML
@@ -36,7 +33,7 @@ public class Game extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("Game.fxml"));
         primaryStage.setTitle(ConfigManager.CFG.getApplicationName());
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 800, 450));
         primaryStage.show();
     }
 
