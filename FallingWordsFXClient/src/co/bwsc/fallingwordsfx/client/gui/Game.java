@@ -11,6 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * @author Benjapol Worakan
+ * @version 2015.11.12
+ */
 public class Game extends Application {
 
     public static void invoke(String[] args) {
@@ -38,7 +42,7 @@ public class Game extends Application {
     }
 
     @FXML
-    public void handleInputAction(ActionEvent actionEvent) {
+    private void handleInputAction(ActionEvent actionEvent) {
 
     }
 }

@@ -10,6 +10,8 @@ public class ConfigManager implements Serializable {
 
     public static final ConfigManager CFG = loadConfiguration();
 
+    private static final String CONFIG_FILE = "./storage/localConfig.cfg";
+
     public static void initialize() {
         saveConfiguration();
     }
@@ -18,14 +20,16 @@ public class ConfigManager implements Serializable {
         System.out.println("Loading configuration file...");
         ConfigManager configManager = null;
         try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./localConfig.cfg"));
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CONFIG_FILE));
             configManager = (ConfigManager) ois.readObject();
         } catch (IOException e) {
             System.out.println("Configuration file not found!");
             e.printStackTrace();
             configManager = createDefaultConfiguration();
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
+            System.out.println("Configuration file could not be loaded");
             e.printStackTrace();
+            configManager = createDefaultConfiguration();
         }
         return configManager;
     }
@@ -47,8 +51,9 @@ public class ConfigManager implements Serializable {
     public static void saveConfiguration() {
         System.out.println("Saving configuration to file...");
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./localConfig.cfg"));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CONFIG_FILE));
             oos.writeObject(CFG);
+            System.out.println("Saved.");
         } catch (IOException e) {
             e.printStackTrace();
         }

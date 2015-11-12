@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+ Author: Benjapol Worakan
+ Version: 2015.11.12
+ -->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<VBox fx:controller="co.bwsc.fallingwordsfx.client.gui.PlayerName" maxHeight="-Infinity" maxWidth="-Infinity"
-      minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="300.0"
-      style="-fx-background-color: #5555FF;" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #5555FF;" xmlns="http://javafx.com/javafx/null"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.bwsc.fallingwordsfx.client.gui.PlayerName">
     <children>
         <HBox alignment="CENTER_LEFT" VBox.vgrow="NEVER">
             <children>
@@ -26,7 +31,7 @@
             <children>
                 <TextField fx:id="nameInput" onAction="#handleNameSubmission" prefWidth="200.0"
                            promptText="Enter your name..."/>
-                <Button onAction="#handleNameSubmission" mnemonicParsing="false" text="Go">
+                <Button mnemonicParsing="false" onAction="#handleNameSubmission" text="Go">
                     <HBox.margin>
                         <Insets left="5.0"/>
                     </HBox.margin>
