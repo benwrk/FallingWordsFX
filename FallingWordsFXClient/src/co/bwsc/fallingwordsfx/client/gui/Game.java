@@ -1,6 +1,7 @@
 package co.bwsc.fallingwordsfx.client.gui;
 
 import co.bwsc.fallingwordsfx.client.ConfigManager;
+import co.bwsc.fallingwordsfx.client.gui.driver.GameDriver;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

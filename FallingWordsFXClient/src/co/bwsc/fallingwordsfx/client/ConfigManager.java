@@ -43,9 +43,10 @@ public class ConfigManager implements Serializable {
         int serverPort = 11123;
         boolean firstLaunch = true;
         String userName = "Local Player";
+        String dictionayFile = "./storage/dictionary.txt";
         ////////////////////////
 
-        return new ConfigManager(applicationName, serverURL, serverPort, firstLaunch, userName);
+        return new ConfigManager(applicationName, serverURL, serverPort, firstLaunch, userName, dictionayFile);
     }
 
     private static void saveConfigManager(ConfigManager cfg) {
@@ -74,13 +75,15 @@ public class ConfigManager implements Serializable {
     private int serverPort;
     private boolean firstLaunch;
     private String userName;
+    private String dictionaryFile;
 
-    private ConfigManager(String applicationName, String serverURL, int serverPort, boolean firstLaunch, String userName) {
+    private ConfigManager(String applicationName, String serverURL, int serverPort, boolean firstLaunch, String userName, String dictionaryFile) {
         this.applicationName = applicationName;
         this.serverURL = serverURL;
         this.serverPort = serverPort;
         this.firstLaunch = firstLaunch;
         this.userName = userName;
+        this.dictionaryFile = dictionaryFile;
     }
 
     public String getApplicationName() {
@@ -103,10 +106,30 @@ public class ConfigManager implements Serializable {
         return userName;
     }
 
+    public String getDictionaryFile() {
+        return dictionaryFile;
+    }
+
+    public void setServerURL(String serverURL) {
+        this.serverURL = serverURL;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
+    }
+
+    public void setFirstLaunch(boolean firstLaunch) {
+        this.firstLaunch = firstLaunch;
+    }
+
     public void setUserName(String userName) {
         System.out.println("Username configuration updated.");
         this.userName = userName;
         saveConfiguration();
+    }
+
+    public void setDictionaryFile(String dictionaryFile) {
+        this.dictionaryFile = dictionaryFile;
     }
 
     public String toString() {

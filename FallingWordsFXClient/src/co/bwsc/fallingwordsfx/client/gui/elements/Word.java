@@ -15,5 +15,6 @@ public class Word extends Label {
     public Word(String word) {
         setFont(new Font("System Bold", 12));
         this.yPosition = -30;
+        this.word = word;
     }
 }
