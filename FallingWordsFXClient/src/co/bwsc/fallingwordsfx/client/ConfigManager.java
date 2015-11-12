@@ -12,13 +12,9 @@ public class ConfigManager implements Serializable {
 
     private static final String CONFIG_FILE = "./storage/localConfig.cfg";
 
-    public static void initialize() {
-        saveConfiguration();
-    }
-
     public static ConfigManager loadConfiguration() {
         System.out.println("Loading configuration file...");
-        ConfigManager configManager = null;
+        ConfigManager configManager;
         try {
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(CONFIG_FILE));
             configManager = (ConfigManager) ois.readObject();
@@ -26,10 +22,12 @@ public class ConfigManager implements Serializable {
             System.out.println("Configuration file not found!");
             e.printStackTrace();
             configManager = createDefaultConfiguration();
+            saveConfiguration();
         } catch (Exception e) {
             System.out.println("Configuration file could not be loaded");
             e.printStackTrace();
             configManager = createDefaultConfiguration();
+            saveConfiguration();
         }
         return configManager;
     }
@@ -53,9 +51,13 @@ public class ConfigManager implements Serializable {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(CONFIG_FILE));
             oos.writeObject(CFG);
-            System.out.println("Saved.");
+            System.out.println("Saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
+            File file = new File(CONFIG_FILE);
+            file.getParentFile().mkdirs();
+            System.out.println("Trying again...");
+            saveConfiguration();
         }
     }
 

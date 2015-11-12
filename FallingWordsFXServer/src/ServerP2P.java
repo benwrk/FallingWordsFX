@@ -5,14 +5,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by WIT-PC on 11/11/2558.
  */
 public class ServerP2P {
+    /**
+     * The instance of ServerP2P
+     */
+    private static ServerP2P serverP2P;
     /**
      * A Map of Client which connect to this server.
      */
@@ -27,10 +28,6 @@ public class ServerP2P {
      */
     private String hostName = "";
     /**
-     * The instance of ServerP2P
-     */
-    private static ServerP2P serverP2P;
-    /**
      * The Socket which server is running
      */
     private ServerSocket serverSocket;
@@ -40,10 +37,53 @@ public class ServerP2P {
     private Thread clientHandler;
 
     /**
+     * Constructor to init the socket
+     */
+    private ServerP2P() {
+        try {
+            serverSocket = new ServerSocket(portNumber);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        clientHandler = new ClientHandler(serverSocket);
+
+    }
+
+    /**
+     * singleton method to get the instance of the server.
+     * I do this because it can have only one server with this port.
+     *
+     * @return a instanct of ServerP2P
+     */
+    public static ServerP2P getInstance() {
+        if (serverP2P == null) {
+            serverP2P = new ServerP2P();
+        }
+        return serverP2P;
+    }
+
+    /**
+     * Main method
+     *
+     * @param arga input from console
+     */
+    public static void main(String[] arga) {
+        ServerP2P serverP2P = new ServerP2P();
+        serverP2P.start();
+    }
+
+    /**
+     * Call to start the Handle client thread
+     */
+    public void start() {
+        clientHandler.start();
+    }
+
+    /**
      * A Thread to handle a client.
      * When client is connected it will connect to this thread and then assign to a new thread.
      */
-    private class ClientHandler extends Thread{
+    private class ClientHandler extends Thread {
         /**
          * A SocketServer
          */
@@ -51,9 +91,10 @@ public class ServerP2P {
 
         /**
          * Constructor to initialize the server socket.
+         *
          * @param serverSocket The Socket of this server.
          */
-        ClientHandler(ServerSocket serverSocket){
+        ClientHandler(ServerSocket serverSocket) {
             this.serverSocket = serverSocket;
         }
 
@@ -62,15 +103,14 @@ public class ServerP2P {
          */
         public void run() {
             while (true) {
-                try{
+                try {
                     Socket socket = serverSocket.accept();
                     ClientThread clientThread = new ClientThread(socket);
                     clientThread.start();
 //                    clientList.put(String.valueOf(socket.getLocalPort()),clientThread);
                     socketList.add(clientThread);
-                    System.out.print("create Socket"+clientThread.toString());
-                }
-                catch (IOException e){
+                    System.out.print("create Socket" + clientThread.toString());
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -80,7 +120,7 @@ public class ServerP2P {
     /**
      * A Thread that handle each of the client.
      */
-    private class ClientThread extends Thread{
+    private class ClientThread extends Thread {
         /**
          * Socket of a client.
          */
@@ -100,7 +140,7 @@ public class ServerP2P {
         /**
          * Message to client
          */
-        private String output ="";
+        private String output = "";
         /**
          * Client name
          */
@@ -108,10 +148,11 @@ public class ServerP2P {
 
         /**
          * Constructor for initialize socket
+         *
          * @param socket client socket
          */
-        ClientThread(Socket socket){
-            this.socket=socket;
+        ClientThread(Socket socket) {
+            this.socket = socket;
             try {
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -124,22 +165,22 @@ public class ServerP2P {
         /**
          * Handle a message from client
          * [connect] if there is an available client waiting the server will exchange client id.
-         *           if not server will send error message and client need to wait
+         * if not server will send error message and client need to wait
+         *
          * @param s message from client
          * @return a out put to a client
          */
-        private void processInput(String s){
+        private void processInput(String s) {
             String toClient = "";
             System.out.println(s);
-            if(s.equals("[connect]")){
-                if(socketList.size()<=1){
+            if (s.equals("[connect]")) {
+                if (socketList.size() <= 1) {
                     out.println("[error]no client");
                     System.out.println("error");
-                }
-                else{
+                } else {
                     ClientThread clientThread = socketList.get(0);
-                    out.println("[connected][ip="+clientThread.socket.getInetAddress()+"][client]");
-                    clientThread.out.print("[connected][ip="+socket.getInetAddress()+"][server]");
+                    out.println("[connected][ip=" + clientThread.socket.getInetAddress() + "][client]");
+                    clientThread.out.print("[connected][ip=" + socket.getInetAddress() + "][server]");
                     socketList.remove(this);
                     socketList.remove(clientThread);
                     try {
@@ -156,7 +197,7 @@ public class ServerP2P {
         /**
          * run
          */
-        public void run(){
+        public void run() {
             try {
                 while ((input = in.readLine()) != null) {
                     processInput(input);
@@ -171,54 +212,14 @@ public class ServerP2P {
 
         /**
          * Get the name of the client
+         *
          * @return the client name
          */
-        public String getClientName(){
-            if(name==null){
+        public String getClientName() {
+            if (name == null) {
                 out.println("[get]name");
             }
             return name;
         }
-    }
-
-    /**
-     * Constructor to init the socket
-     */
-    private ServerP2P(){
-        try {
-            serverSocket = new ServerSocket( portNumber);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        clientHandler = new ClientHandler(serverSocket);
-
-    }
-
-    /**
-     * Call to start the Handle client thread
-     */
-    public void start(){
-        clientHandler.start();
-    }
-
-    /**
-     * singleton method to get the instance of the server.
-     * I do this because it can have only one server with this port.
-     * @return a instanct of ServerP2P
-     */
-    public static ServerP2P getInstance(){
-        if(serverP2P==null){
-            serverP2P = new ServerP2P();
-        }
-        return serverP2P;
-    }
-
-    /**
-     * Main method
-     * @param arga input from console
-     */
-    public static void main(String[] arga){
-        ServerP2P serverP2P = new ServerP2P();
-        serverP2P.start();
     }
 }
