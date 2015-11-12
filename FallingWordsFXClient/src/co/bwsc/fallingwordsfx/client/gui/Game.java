@@ -65,6 +65,6 @@ public class Game extends Application {
      */
     @FXML
     private void handleSinglePlayer(ActionEvent actionEvent) {
-        GameDriver.initiateSinglePlayer(this);
+        GameDriver singlePlayerDriver = new GameDriver(this, GameDriver.SINGLEPLAYER);
     }
 }

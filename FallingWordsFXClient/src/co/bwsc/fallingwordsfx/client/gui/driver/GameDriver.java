@@ -12,14 +12,29 @@ import java.util.LinkedList;
  * @version 2015.11.12
  */
 public class GameDriver {
+    public static final GameMode SINGLEPLAYER = GameMode.SINGLEPLAYER, MULTIPLAYER = GameMode.MULTIPLAYER;
     private Application game;
     private GameMode gameMode;
 
     public GameDriver(Application game, GameMode gameMode) {
         this.game = game;
         this.gameMode = gameMode;
+
+        switch (gameMode) {
+            case SINGLEPLAYER:
+                initiateSinglePlayer();
+                break;
+            case MULTIPLAYER:
+                initiateMultiPlayer();
+                break;
+        }
     }
-    public static void initiateSinglePlayer(Application application) {
+
+    private void initiateMultiPlayer() {
+
+    }
+
+    private void initiateSinglePlayer() {
         LinkedList<Word> wordsList = new LinkedList<>();
 
         ArrayList<String> dictionary = DictionaryManager.getInstance().getDictionary();
@@ -27,5 +42,11 @@ public class GameDriver {
             Word word = new Word(dictionary.get((int) Math.random() * DictionaryManager.getInstance().getSize()));
             wordsList.add(word);
         }
+
+        System.out.println(wordsList.toString());
+    }
+
+    private enum GameMode {
+        SINGLEPLAYER, MULTIPLAYER;
     }
 }

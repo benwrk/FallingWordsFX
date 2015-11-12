@@ -67,6 +67,7 @@ public class DictionaryManager {
      * Read words from the dictionary file into the dictionary ArrayList.
      */
     private void readDictionaryFile() {
+        System.out.println("Reading dictionary from file...");
         BufferedReader br = null;
         try {
             br = new BufferedReader(new InputStreamReader(new FileInputStream(ConfigManager.CFG.getDictionaryFile())));
@@ -75,7 +76,6 @@ public class DictionaryManager {
             e.printStackTrace();
         }
 
-        ArrayList<String> dictionary = new ArrayList<>();
         try {
             String line = br.readLine();
             while (line != null) {

@@ -10,7 +10,7 @@ public class ConfigManager implements Serializable {
 
     public static final ConfigManager CFG = loadConfiguration();
 
-    private static final String CONFIG_FILE = "./storage/localConfig.cfg";
+    private static final String CONFIG_FILE = "./storage/dynamic/localConfig.cfg";
 
     public static void initialize() {
         saveConfiguration();
@@ -43,10 +43,10 @@ public class ConfigManager implements Serializable {
         int serverPort = 11123;
         boolean firstLaunch = true;
         String userName = "Local Player";
-        String dictionayFile = "./storage/dictionary.txt";
+        String dictionaryFile = "./storage/dictionary.txt";
         ////////////////////////
 
-        return new ConfigManager(applicationName, serverURL, serverPort, firstLaunch, userName, dictionayFile);
+        return new ConfigManager(applicationName, serverURL, serverPort, firstLaunch, userName, dictionaryFile);
     }
 
     private static void saveConfigManager(ConfigManager cfg) {

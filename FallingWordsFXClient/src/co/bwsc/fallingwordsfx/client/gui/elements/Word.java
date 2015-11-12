@@ -17,4 +17,8 @@ public class Word extends Label {
         this.yPosition = -30;
         this.word = word;
     }
+
+    public String toString() {
+        return "[Word]: " + word + " + at (" + xPosition + ", " + yPosition + ").";
+    }
 }
