@@ -27,6 +27,7 @@ public class ConfigManager implements Serializable {
         this.userName = userName;
         this.dictionaryFile = dictionaryFile;
         this.positiveSoundFile = positiveSoundFile;
+        this.localPort = localPort;
     }
 
     public static void initialize() {

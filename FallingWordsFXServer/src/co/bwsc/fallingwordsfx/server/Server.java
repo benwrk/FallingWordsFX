@@ -58,10 +58,10 @@ public class Server implements Runnable {
                     try {
                         serverOutputStream = new ObjectOutputStream(server.getOutputStream());
                         clientOutputStream = new ObjectOutputStream(client.getOutputStream());
+                        serverOutputStream.writeObject("Server");
                         serverOutputStream.writeObject(clientAddress);
+                        clientOutputStream.writeObject("Client");
                         clientOutputStream.writeObject(serverAddress);
-                        server.close();
-                        client.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                         continue;
@@ -79,15 +79,15 @@ public class Server implements Runnable {
         while (true) {
             try {
                 Socket socketConnection = serverSocket.accept();
-                ObjectOutputStream oos = new ObjectOutputStream(socketConnection.getOutputStream());
+//                ObjectOutputStream oos = new ObjectOutputStream(socketConnection.getOutputStream());
 
                 if (servers.size() <= clients.size()) {
                     System.out.println("Connection from " + socketConnection.getInetAddress() + ", classified as Server.");
-                    oos.writeObject("Server");
+//                    oos.writeObject("Server");
                     servers.add(socketConnection);
                 } else {
                     System.out.println("Connection from " + socketConnection.getInetAddress() + ", classified as Client.");
-                    oos.writeObject("Client");
+//                    oos.writeObject("Client");
                     clients.add(socketConnection);
                 }
 

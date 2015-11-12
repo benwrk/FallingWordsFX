@@ -22,6 +22,7 @@ public class GameDriver {
     public static final GameMode SINGLEPLAYER = GameMode.SINGLEPLAYER, MULTIPLAYER = GameMode.MULTIPLAYER;
     private static Timer timer = new Timer();
     private static String opponentName = "";
+    private Thread streamFromRemote;
     private TimerTask scorer;
     private TimerTask updater;
     private TimerTask timeCounter;
@@ -44,21 +45,6 @@ public class GameDriver {
     }
 
     public void initiate() {
-        switch (gameMode) {
-            case SINGLEPLAYER:
-                initiateSinglePlayer();
-                break;
-            case MULTIPLAYER:
-                initiateMultiPlayer();
-                break;
-        }
-    }
-
-    private void initiateMultiPlayer() {
-        ConnectionManager.initiateConnectionToServer();
-    }
-
-    private void initiateSinglePlayer() {
         wordsList = new ArrayList<>();
 
         ArrayList<String> dictionary = DictionaryManager.getInstance().getDictionary();
@@ -74,6 +60,24 @@ public class GameDriver {
         game.getCanvasPane().getChildren().addAll(wordsList);
         game.getCanvasPane().requestLayout();
 
+        switch (gameMode) {
+            case SINGLEPLAYER:
+                initiateSinglePlayer();
+                break;
+            case MULTIPLAYER:
+                initiateMultiPlayer();
+                break;
+        }
+    }
+
+    private void initiateMultiPlayer() {
+        ConnectionManager.initiateConnectionToServer();
+        streamFromRemote = new Thread(() -> {
+
+        });
+    }
+
+    private void initiateSinglePlayer() {
         game.getRemoteScore().setText("");
 
         launchSinglePlayerThreads();

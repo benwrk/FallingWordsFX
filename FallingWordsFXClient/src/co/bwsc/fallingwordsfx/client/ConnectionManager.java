@@ -3,6 +3,7 @@ package co.bwsc.fallingwordsfx.client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
@@ -14,6 +15,8 @@ public class ConnectionManager {
     public static final ConnectionType CLIENT = ConnectionType.CLIENT;
     private static ConnectionType connectionType;
     private static String serverIP;
+    private static ObjectOutputStream streamToRemote;
+    private static ObjectInputStream streamFromRemote;
 
     public static ConnectionType getConnectionType() {
         return connectionType;
@@ -26,7 +29,7 @@ public class ConnectionManager {
     public static void initiateConnectionToServer() {
         System.out.println("Initiating connection to server...");
         try {
-            Socket socket = new Socket(ConfigManager.CFG.getServerAddress(), 11123);
+            Socket socket = new Socket(ConfigManager.CFG.getServerAddress(), ConfigManager.CFG.getServerPort());
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
@@ -45,6 +48,7 @@ public class ConnectionManager {
                 if (response.startsWith("/")) {
                     serverIP = response.substring(1);
                     System.out.println("Server IP set to " + serverIP + ".");
+                    socket.close();
                 } else {
                     if (response.equals("Client")) {
                         System.out.println("ConnectionType set to " + CLIENT + " mode.");
@@ -55,6 +59,7 @@ public class ConnectionManager {
                     }
                 }
             }
+            initiatePeerToPeer();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -62,6 +67,50 @@ public class ConnectionManager {
         }
 
 
+    }
+
+    private static void initiatePeerToPeer() {
+        switch (connectionType) {
+            case SERVER:
+                initiateLocalServer();
+                break;
+            case CLIENT:
+                initiateLocalClient();
+                break;
+        }
+    }
+
+    private static void initiateLocalClient() {
+        try {
+            // Wait for server initialization.
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println("Client opening socket to " + serverIP + " at port " + ConfigManager.CFG.getLocalPort());
+            Socket socket = new Socket(serverIP, ConfigManager.CFG.getLocalPort());
+
+            streamToRemote = new ObjectOutputStream(socket.getOutputStream());
+            streamToRemote.writeObject("StartSync");
+            streamFromRemote = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void initiateLocalServer() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(ConfigManager.CFG.getLocalPort());
+            System.out.println("Local server ready. Waiting for connection at port " + ConfigManager.CFG.getLocalPort());
+            Socket socket = serverSocket.accept();
+            streamToRemote = new ObjectOutputStream(socket.getOutputStream());
+            streamToRemote.writeObject("StartSync");
+            streamFromRemote = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private enum ConnectionType {
