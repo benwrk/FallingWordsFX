@@ -4,9 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="450.0" minWidth="800.0" prefHeight="450.0" prefWidth="800.0"
+<VBox fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="450.0" minWidth="800.0" prefHeight="450.0"
+      prefWidth="800.0"
       xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="co.bwsc.fallingwordsfx.client.sample.Login">
+      fx:controller="co.bwsc.fallingwordsfx.client.gui.Game">
     <children>
         <Pane style="-fx-background-color: #5555FF;" VBox.vgrow="ALWAYS"/>
         <HBox alignment="CENTER" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" prefWidth="600.0"
@@ -50,7 +51,7 @@
         <HBox alignment="TOP_CENTER" prefHeight="375.0" prefWidth="200.0" style="-fx-background-color: #222222;"
               VBox.vgrow="NEVER">
             <children>
-                <Pane maxWidth="800.0" minWidth="800.0" prefHeight="200.0" prefWidth="800.0"
+                <Pane fx:id="canvasPane" maxWidth="800.0" minWidth="800.0" prefHeight="200.0" prefWidth="800.0"
                       style="-fx-background-color: #333333;"/>
             </children>
         </HBox>
@@ -58,7 +59,7 @@
               style="-fx-background-color: #5555FF;" VBox.vgrow="NEVER">
             <children>
                 <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="input"/>
+                <TextField fx:id="input" onAction="#handleInputAction"/>
                 <Pane maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
             </children>
         </HBox>

@@ -1,6 +1,6 @@
 package co.bwsc.fallingwordsfx.client;
 
-import co.bwsc.fallingwordsfx.client.sample.Login;
+import co.bwsc.fallingwordsfx.client.gui.Login;
 
 import java.util.logging.Logger;
 
