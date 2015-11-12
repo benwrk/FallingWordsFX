@@ -57,7 +57,7 @@ public class ConfigManager implements Serializable {
         // Default settings /////
         String applicationName = "FallingWords FX";
         String serverAddress = "127.0.0.1";
-        int serverPort = 11123;
+        int serverPort = 11678;
         boolean firstLaunch = true;
         String userName = "Local Player";
         String dictionaryFile = "./storage/dictionary.txt";

@@ -60,10 +60,17 @@ public class Server implements Runnable {
                         clientOutputStream = new ObjectOutputStream(client.getOutputStream());
                         serverOutputStream.writeObject(clientAddress);
                         clientOutputStream.writeObject(serverAddress);
+                        server.close();
+                        client.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                         continue;
                     }
+                }
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });

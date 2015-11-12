@@ -40,7 +40,7 @@ public class ConfigManager implements Serializable {
         // Default settings /////
         String applicationName = "FallingWords FX";
         String serverURL = "127.0.0.1";
-        int serverPort = 11123;
+        int serverPort = 11678;
         ////////////////////////
 
         return new ConfigManager(applicationName, serverURL, serverPort);
