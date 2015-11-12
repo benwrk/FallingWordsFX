@@ -1,4 +1,67 @@
-<?import javafx.scene.layout.GridPane?>
-<GridPane fx:controller="co.bwsc.fallingwordsfx.client.sample.LoginController"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-</GridPane>
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="450.0" minWidth="800.0" prefHeight="450.0" prefWidth="800.0"
+      xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.bwsc.fallingwordsfx.client.sample.Login">
+    <children>
+        <Pane style="-fx-background-color: #5555FF;" VBox.vgrow="ALWAYS"/>
+        <HBox alignment="CENTER" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" prefWidth="600.0"
+              style="-fx-background-color: #5555FF;" VBox.vgrow="NEVER">
+            <children>
+                <Label text="FallingWordsFX" textFill="WHITE">
+                    <padding>
+                        <Insets left="8.0"/>
+                    </padding>
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="time" text="00 : 00" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="12.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <Label fx:id="localScore" text="You: XX" textFill="WHITE">
+                    <padding>
+                        <Insets right="8.0"/>
+                    </padding>
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+                <Label fx:id="remoteScore" text="Name: XX" textFill="WHITE">
+                    <HBox.margin>
+                        <Insets right="8.0"/>
+                    </HBox.margin>
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <HBox alignment="TOP_CENTER" prefHeight="375.0" prefWidth="200.0" style="-fx-background-color: #222222;"
+              VBox.vgrow="NEVER">
+            <children>
+                <Pane maxWidth="800.0" minWidth="800.0" prefHeight="200.0" prefWidth="800.0"
+                      style="-fx-background-color: #333333;"/>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="600.0"
+              style="-fx-background-color: #5555FF;" VBox.vgrow="NEVER">
+            <children>
+                <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="input"/>
+                <Pane maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+        <Pane style="-fx-background-color: #5555FF;" VBox.vgrow="ALWAYS"/>
+    </children>
+</VBox>

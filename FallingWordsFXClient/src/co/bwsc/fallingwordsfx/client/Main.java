@@ -12,7 +12,6 @@ public class Main {
     private static final Logger log = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-
-        Login.launch(args);
+        Login.invoke(args);
     }
 }
