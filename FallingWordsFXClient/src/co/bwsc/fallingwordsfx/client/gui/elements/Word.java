@@ -1,6 +1,7 @@
 package co.bwsc.fallingwordsfx.client.gui.elements;
 
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 /**
@@ -8,17 +9,17 @@ import javafx.scene.text.Font;
  * @version 2015.11.12
  */
 public class Word extends Label {
-    private String word;
-    private double xPosition;
-    private double yPosition;
 
     public Word(String word) {
-        setFont(new Font("System Bold", 12));
-        this.yPosition = -30;
-        this.word = word;
+        setFont(new Font("System Bold", 15));
+        setTextFill(Color.WHITE);
+        setText(word);
+        setLayoutY(-20);
+//        this.xPosition = Math.random() *
+        setLayoutX(Math.random() * 800.0);
     }
 
     public String toString() {
-        return "[Word]: " + word + " + at (" + xPosition + ", " + yPosition + ").";
+        return "[Word]: " + getText() + " at (" + getLayoutX() + ", " + getLayoutY() + ").";
     }
 }

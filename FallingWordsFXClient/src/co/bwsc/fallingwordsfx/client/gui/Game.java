@@ -10,6 +10,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -17,28 +20,50 @@ import javafx.stage.Stage;
  * @version 2015.11.12
  */
 public class Game extends Application {
-
-    public static void invoke(String[] args) {
-        launch(args);
-    }
-
+    @FXML
+    private HBox canvasBar;
+    @FXML
+    private Pane topPane;
+    @FXML
+    private HBox topBar;
+    @FXML
+    private HBox bottomBar;
+    @FXML
+    private Pane bottomPane;
+    /**
+     * A VBox which is the root of this window.
+     */
+    @FXML
+    private VBox root;
+    /**
+     * A Pane for falling words.
+     */
+    @FXML
+    private Pane canvasPane;
     /**
      * A Label to display local player's score.
      */
     @FXML
     private Label localScore;
-
-    /** A Label to display remote player's score. */
+    /**
+     * A Label to display remote player's score.
+     */
     @FXML
     private Label remoteScore;
-
-    /** A Label to display the game timer. */
+    /**
+     * A Label to display the game timer.
+     */
     @FXML
     private Label timer;
-
-    /** A TextField to receive keyboard inputs. */
+    /**
+     * A TextField to receive keyboard inputs.
+     */
     @FXML
     private TextField input;
+
+    public static void invoke(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -66,5 +91,26 @@ public class Game extends Application {
     @FXML
     private void handleSinglePlayer(ActionEvent actionEvent) {
         GameDriver singlePlayerDriver = new GameDriver(this, GameDriver.SINGLEPLAYER);
+        singlePlayerDriver.initiate();
+    }
+
+    public Pane getCanvasPane() {
+        return canvasPane;
+    }
+
+    public Label getLocalScore() {
+        return localScore;
+    }
+
+    public Label getRemoteScore() {
+        return remoteScore;
+    }
+
+    public TextField getInput() {
+        return input;
+    }
+
+    public Label getTimer() {
+        return timer;
     }
 }

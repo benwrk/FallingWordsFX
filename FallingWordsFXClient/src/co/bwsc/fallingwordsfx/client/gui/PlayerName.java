@@ -34,12 +34,14 @@ public class PlayerName extends Application {
         primaryStage.show();
 
 //        primaryStage.close();
-        primaryStage.setOnCloseRequest(event -> System.out.println("Test"));
+        primaryStage.setOnCloseRequest(event -> {
+            ConfigManager.saveConfiguration();
+            System.exit(0);
+        });
     }
 
     @FXML
     private void handleNameSubmission(ActionEvent actionEvent) {
-        System.out.println("Test");
         ConfigManager.CFG.setUserName(nameInput.getText());
         try {
             System.out.println("Performing stage change to " + Game.class.getName() + "...");

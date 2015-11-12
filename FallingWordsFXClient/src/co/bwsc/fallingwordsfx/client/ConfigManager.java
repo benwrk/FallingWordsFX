@@ -44,9 +44,10 @@ public class ConfigManager implements Serializable {
         boolean firstLaunch = true;
         String userName = "Local Player";
         String dictionaryFile = "./storage/dictionary.txt";
+        String positiveSoundFile = "./storage/positive.wav";
         ////////////////////////
 
-        return new ConfigManager(applicationName, serverURL, serverPort, firstLaunch, userName, dictionaryFile);
+        return new ConfigManager(applicationName, serverURL, serverPort, firstLaunch, userName, dictionaryFile, positiveSoundFile);
     }
 
     private static void saveConfigManager(ConfigManager cfg) {
@@ -76,14 +77,16 @@ public class ConfigManager implements Serializable {
     private boolean firstLaunch;
     private String userName;
     private String dictionaryFile;
+    private String positiveSoundFile;
 
-    private ConfigManager(String applicationName, String serverURL, int serverPort, boolean firstLaunch, String userName, String dictionaryFile) {
+    private ConfigManager(String applicationName, String serverURL, int serverPort, boolean firstLaunch, String userName, String dictionaryFile, String positiveSoundFile) {
         this.applicationName = applicationName;
         this.serverURL = serverURL;
         this.serverPort = serverPort;
         this.firstLaunch = firstLaunch;
         this.userName = userName;
         this.dictionaryFile = dictionaryFile;
+        this.positiveSoundFile = positiveSoundFile;
     }
 
     public String getApplicationName() {
@@ -130,6 +133,10 @@ public class ConfigManager implements Serializable {
 
     public void setDictionaryFile(String dictionaryFile) {
         this.dictionaryFile = dictionaryFile;
+    }
+
+    public String getPositiveSoundFile() {
+        return positiveSoundFile;
     }
 
     public String toString() {
