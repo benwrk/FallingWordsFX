@@ -109,7 +109,7 @@ public class ServerP2P {
                     clientThread.start();
 //                    clientList.put(String.valueOf(socket.getLocalPort()),clientThread);
                     socketList.add(clientThread);
-                    System.out.print("create Socket" + clientThread.toString());
+                    System.out.println("create Socket" + clientThread.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -180,12 +180,14 @@ public class ServerP2P {
                 } else {
                     ClientThread clientThread = socketList.get(0);
                     out.println("[connected][ip=" + clientThread.socket.getInetAddress() + "][client]");
-                    clientThread.out.print("[connected][ip=" + socket.getInetAddress() + "][server]");
+                    clientThread.out.println("[connected][ip=" + socket.getInetAddress() + "][server]");
                     socketList.remove(this);
                     socketList.remove(clientThread);
                     try {
                         clientThread.socket.close();
+                        clientThread.interrupt();
                         socket.close();
+                        this.interrupt();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -199,11 +201,12 @@ public class ServerP2P {
          */
         public void run() {
             try {
-                while ((input = in.readLine()) != null) {
+                while (!socket.isClosed()) {
+                    if(socket.isClosed()) {
+                       break;
+                    }
+                    input = in.readLine();
                     processInput(input);
-                    if (output.equals("<end>"))
-                        socket.close();
-                    break;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
