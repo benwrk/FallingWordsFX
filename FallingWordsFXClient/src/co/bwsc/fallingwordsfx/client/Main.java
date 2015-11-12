@@ -1,6 +1,6 @@
 package co.bwsc.fallingwordsfx.client;
 
-import co.bwsc.fallingwordsfx.client.gui.Game;
+import co.bwsc.fallingwordsfx.client.gui.PlayerName;
 
 import java.util.logging.Logger;
 
@@ -14,8 +14,8 @@ public class Main {
     public static void main(String[] args) {
         ConfigManager.initialize();
         if (ConfigManager.CFG.isFirstLaunch()) {
-//            Login.invoke(args);
+            PlayerName.invoke(args);
         }
-        Game.invoke(args);
+//        Game.invoke(args);
     }
 }

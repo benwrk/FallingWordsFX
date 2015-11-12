@@ -13,7 +13,7 @@ public class Word extends Label {
     private double yPosition;
 
     public Word(String word) {
-        setFont(new Font("System", 12));
+        setFont(new Font("System Bold", 12));
         this.yPosition = -30;
     }
 }

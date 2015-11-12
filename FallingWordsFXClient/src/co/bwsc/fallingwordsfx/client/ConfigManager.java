@@ -45,6 +45,7 @@ public class ConfigManager implements Serializable {
     }
 
     public static void saveConfiguration() {
+        System.out.println("Saving configuration to file...");
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./localConfig.cfg"));
             oos.writeObject(CFG);
@@ -85,6 +86,12 @@ public class ConfigManager implements Serializable {
 
     public String getUserName() {
         return userName;
+    }
+
+    public void setUserName(String userName) {
+        System.out.println("Username configuration updated.");
+        this.userName = userName;
+        saveConfiguration();
     }
 
     public String toString() {
