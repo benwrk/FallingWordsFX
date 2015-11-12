@@ -12,6 +12,7 @@ public class Main {
     private static final Logger log = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
+        ConfigManager.initialize();
         if (ConfigManager.CFG.isFirstLaunch()) {
             PlayerName.invoke(args);
         }

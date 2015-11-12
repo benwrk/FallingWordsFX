@@ -65,9 +65,9 @@ public class ServerP2P {
     /**
      * Main method
      *
-     * @param arga input from console
+     * @param args input from console
      */
-    public static void main(String[] arga) {
+    public static void main(String[] args) {
         ServerP2P serverP2P = new ServerP2P();
         serverP2P.start();
     }

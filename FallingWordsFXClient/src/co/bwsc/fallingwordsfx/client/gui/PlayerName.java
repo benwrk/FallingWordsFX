@@ -47,6 +47,7 @@ public class PlayerName extends Application {
             rootWindow.hide();
             Application gameStage = new Game();
             gameStage.start(rootWindow);
+            System.out.println("Stage changed to " + gameStage.getClass().getName());
         } catch (Exception e) {
             System.out.println("JavaFX stage change error!");
             e.printStackTrace();
