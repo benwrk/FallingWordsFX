@@ -21,15 +21,21 @@ public class Game extends Application {
         launch(args);
     }
 
+    /**
+     * A Label to display local player's score.
+     */
     @FXML
     private Label localScore;
 
+    /** A Label to display remote player's score. */
     @FXML
     private Label remoteScore;
 
+    /** A Label to display the game timer. */
     @FXML
-    private Label time;
+    private Label timer;
 
+    /** A TextField to receive keyboard inputs. */
     @FXML
     private TextField input;
 
@@ -41,8 +47,23 @@ public class Game extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Handles the input TextField 's action.
+     *
+     * @param actionEvent - not used
+     */
     @FXML
     private void handleInputAction(ActionEvent actionEvent) {
 
+    }
+
+    /**
+     * Handles the Single Player Ready button.
+     *
+     * @param actionEvent - not used
+     */
+    @FXML
+    private void handleSinglePlayer(ActionEvent actionEvent) {
+        GameDriver.initiateSinglePlayer(this);
     }
 }
