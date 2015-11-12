@@ -31,7 +31,8 @@
                                 <Insets left="8.0"/>
                             </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" text="Multiplayer Ready">
+                        <Button fx:id="multiPlayerReady" mnemonicParsing="false" onAction="#handleMultiPlayer"
+                                text="Multiplayer Ready">
                             <HBox.margin>
                                 <Insets left="4.0"/>
                             </HBox.margin>
@@ -47,14 +48,18 @@
         <HBox fx:id="topBar" alignment="CENTER" maxHeight="35.0" minHeight="35.0" prefHeight="35.0" prefWidth="800.0"
               style="-fx-background-color: #4444FF;">
             <children>
-                <Label text="FallingWordsFX" textFill="WHITE">
-                    <padding>
-                        <Insets left="8.0"/>
-                    </padding>
-                    <font>
-                        <Font name="System Bold" size="12.0"/>
-                    </font>
-                </Label>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="FallingWordsFX" textFill="WHITE">
+                            <padding>
+                                <Insets left="8.0"/>
+                            </padding>
+                            <font>
+                                <Font name="System Bold" size="12.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                     <children>
                         <Label fx:id="timer" text="00 : 00" textFill="WHITE">
@@ -64,22 +69,26 @@
                         </Label>
                     </children>
                 </HBox>
-                <Label fx:id="localScore" text="You: XX" textFill="WHITE">
-                    <padding>
-                        <Insets right="8.0"/>
-                    </padding>
-                    <font>
-                        <Font name="System Bold" size="12.0"/>
-                    </font>
-                </Label>
-                <Label fx:id="remoteScore" text="Opponent: XX" textFill="WHITE">
-                    <HBox.margin>
-                        <Insets right="8.0"/>
-                    </HBox.margin>
-                    <font>
-                        <Font name="System Bold" size="12.0"/>
-                    </font>
-                </Label>
+                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="localScore" text="You: XX" textFill="WHITE">
+                            <padding>
+                                <Insets right="8.0"/>
+                            </padding>
+                            <font>
+                                <Font name="System Bold" size="12.0"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="remoteScore" text="Opponent: XX" textFill="WHITE">
+                            <HBox.margin>
+                                <Insets right="8.0"/>
+                            </HBox.margin>
+                            <font>
+                                <Font name="System Bold" size="12.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
             </children>
         </HBox>
     </children>

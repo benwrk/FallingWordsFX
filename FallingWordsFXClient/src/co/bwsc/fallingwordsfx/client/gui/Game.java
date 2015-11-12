@@ -113,4 +113,15 @@ public class Game extends Application {
     public Label getTimer() {
         return timer;
     }
+
+    /**
+     * Handles the Multi Player Ready button.
+     *
+     * @param actionEvent - not used
+     */
+    @FXML
+    private void handleMultiPlayer(ActionEvent actionEvent) {
+        GameDriver multiPlayerDriver = new GameDriver(this, GameDriver.MULTIPLAYER);
+        multiPlayerDriver.initiate();
+    }
 }

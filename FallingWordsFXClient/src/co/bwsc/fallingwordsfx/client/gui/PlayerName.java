@@ -43,6 +43,7 @@ public class PlayerName extends Application {
     @FXML
     private void handleNameSubmission(ActionEvent actionEvent) {
         ConfigManager.CFG.setUserName(nameInput.getText());
+        ConfigManager.CFG.setFirstLaunch(false);
         try {
             System.out.println("Performing stage change to " + Game.class.getName() + "...");
             Stage rootWindow = (Stage) root.getScene().getWindow();

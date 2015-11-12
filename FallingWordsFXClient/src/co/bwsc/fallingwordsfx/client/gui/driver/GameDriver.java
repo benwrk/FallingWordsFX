@@ -1,6 +1,7 @@
 package co.bwsc.fallingwordsfx.client.gui.driver;
 
 import co.bwsc.fallingwordsfx.client.ConfigManager;
+import co.bwsc.fallingwordsfx.client.ConnectionManager;
 import co.bwsc.fallingwordsfx.client.DictionaryManager;
 import co.bwsc.fallingwordsfx.client.gui.Game;
 import co.bwsc.fallingwordsfx.client.gui.elements.Word;
@@ -54,7 +55,7 @@ public class GameDriver {
     }
 
     private void initiateMultiPlayer() {
-
+        ConnectionManager.initiateConnectionToServer();
     }
 
     private void initiateSinglePlayer() {
@@ -207,6 +208,7 @@ public class GameDriver {
         }
 
         public void play() {
+            soundClip.stop();
             soundClip.setFramePosition(0);
             soundClip.start();
         }

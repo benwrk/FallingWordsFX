@@ -1,3 +1,5 @@
+package co.bwsc.fallingwordsfx.server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,11 +20,11 @@ public class ServerP2P {
      * A Map of Client which connect to this server.
      */
 //    private Map<String, ClientThread> clientList = new HashMap<String, ClientThread>();
-    private ArrayList<ClientThread> socketList = new ArrayList<ClientThread>();
+    private ArrayList<ClientThread> socketList = new ArrayList<>();
     /**
      * Server port.
      */
-    private int portNumber = 12345;
+    private int portNumber = 11123;
     /**
      * Host name // not used
      */
@@ -202,9 +204,6 @@ public class ServerP2P {
         public void run() {
             try {
                 while (!socket.isClosed()) {
-                    if(socket.isClosed()) {
-                       break;
-                    }
                     input = in.readLine();
                     processInput(input);
                 }
