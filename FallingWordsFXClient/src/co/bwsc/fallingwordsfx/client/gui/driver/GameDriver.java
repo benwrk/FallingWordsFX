@@ -10,6 +10,9 @@ import javafx.application.Platform;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,11 +25,14 @@ public class GameDriver {
     public static final GameMode SINGLEPLAYER = GameMode.SINGLEPLAYER, MULTIPLAYER = GameMode.MULTIPLAYER;
     private static Timer timer = new Timer();
     private static String opponentName = "";
-    private Thread streamFromRemote;
+    boolean gameOver;
+    private ObjectInputStream streamFromRemote;
+    private ObjectOutputStream streamToRemote;
+    private Socket socketToRemote;
+    private Thread streamFromRemoteThread;
     private TimerTask scorer;
     private TimerTask updater;
     private TimerTask timeCounter;
-    boolean gameOver;
     private Game game;
     private GameMode gameMode;
     private ArrayList<Word> wordsList;
@@ -45,21 +51,6 @@ public class GameDriver {
     }
 
     public void initiate() {
-        wordsList = new ArrayList<>();
-
-        ArrayList<String> dictionary = DictionaryManager.getInstance().getDictionary();
-        for (int i = 0; i < 100; i++) {
-            Word word = new Word(dictionary.get((int) (Math.random() * DictionaryManager.getInstance().getSize())));
-            wordsList.add(word);
-        }
-
-        System.out.println(wordsList.toString());
-
-        game.getInput().setDisable(false);
-
-        game.getCanvasPane().getChildren().addAll(wordsList);
-        game.getCanvasPane().requestLayout();
-
         switch (gameMode) {
             case SINGLEPLAYER:
                 initiateSinglePlayer();
@@ -70,16 +61,88 @@ public class GameDriver {
         }
     }
 
-    private void initiateMultiPlayer() {
-        ConnectionManager.initiateConnectionToServer();
-        streamFromRemote = new Thread(() -> {
-
+    private void clientWordsListHandler() {
+        Platform.runLater(() -> {
+            game.getCanvasPane().getChildren().addAll(wordsList);
+            game.getCanvasPane().requestLayout();
         });
+    }
+
+    private void initializeWordsList() {
+        wordsList = new ArrayList<>();
+
+        ArrayList<String> dictionary = DictionaryManager.getInstance().getDictionary();
+        for (int i = 0; i < 100; i++) {
+            Word word = new Word(dictionary.get((int) (Math.random() * DictionaryManager.getInstance().getSize())));
+            wordsList.add(word);
+        }
+
+
+        game.getCanvasPane().getChildren().addAll(wordsList);
+        game.getCanvasPane().requestLayout();
+    }
+
+    private void initiateMultiPlayer() {
+        game.getInput().setPromptText("Waiting for another player...");
+        ConnectionManager.initiateConnectionToServer();
+        streamFromRemote = ConnectionManager.getStreamFromRemote();
+        streamToRemote = ConnectionManager.getStreamToRemote();
+        socketToRemote = ConnectionManager.getSocketToRemote();
+        streamFromRemoteThread = new Thread(() -> {
+            while (!socketToRemote.isClosed()) {
+                try {
+                    Object o = streamFromRemote.readObject();
+                    if (o == null) {
+                        break;
+                    }
+
+                    if (o != null) {
+                        if (o instanceof String) {
+                            String s = (String) o;
+                            if (s.startsWith("OPNAME::")) {
+                                opponentName = s.substring(8);
+                                System.out.println("Opponent name received: " + opponentName);
+                            } else if (s.startsWith("OPSCORE::")) {
+                                setRemoteScore(s.substring(9));
+                            } else if (s.equals("Ready")) {
+                                startMultiPlayerGame();
+                            }
+                        } else if (o instanceof ArrayList) {
+                            System.out.println("ArrayList of Word recieved from local server.");
+                            wordsList = (ArrayList<Word>) o;
+                            clientWordsListHandler();
+                        } else if (o instanceof Word) {
+                            System.out.println("Opponent completed the word: " + o.toString());
+                            removeWord((Word) o);
+                            wordsList.remove(o);
+                        }
+                    }
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        streamFromRemoteThread.start();
+
+        sendToRemote("OPNAME::" + ConfigManager.CFG.getUserName());
+        if (ConnectionManager.getConnectionType() == ConnectionManager.SERVER) {
+            initializeWordsList();
+            sendToRemote(wordsList);
+        }
+
+
+        game.getInput().setDisable(false);
+        setRemoteScore("0");
+        launchMultiPlayerThreads();
     }
 
     private void initiateSinglePlayer() {
         game.getRemoteScore().setText("");
-
+        initializeWordsList();
         launchSinglePlayerThreads();
     }
 
@@ -115,7 +178,7 @@ public class GameDriver {
         });
     }
 
-    private void launchSinglePlayerThreads() {
+    private void initiateGameTask() {
         gameOver = false;
         wordProcessed = 0;
         interval = fallInterval;
@@ -130,10 +193,17 @@ public class GameDriver {
                 }
                 for (int i = 0; i < wordProcessed && i < wordsList.size(); i++) {
                     wordsList.get(i).setLayoutY(wordsList.get(i).getLayoutY() + fallSpeed);
+                    if (wordsList.get(i).getLayoutY() >= 390) {
+                        removeWord(wordsList.get(i));
+                        wordsList.remove(wordsList.get(i));
+                    }
                 }
             }
         };
 
+    }
+
+    private void launchSinglePlayerThreads() {
         localScore = 0.0;
         scorer = new TimerTask() {
             @Override
@@ -143,7 +213,7 @@ public class GameDriver {
                     if (word.getText().equalsIgnoreCase(game.getInput().getText())) {
                         removeWord(word);
                         GameSound.POSITIVE.play();
-                        wordsList.remove(i);
+                        wordsList.remove(word);
                         setLocalScore(String.format("%.0f", ++localScore));
                         setInputField("");
                         continue;
@@ -152,6 +222,58 @@ public class GameDriver {
             }
         };
 
+        initiateGameTask();
+        initiateTimeCounterTask();
+        timer.scheduleAtFixedRate(scorer, 0, 20);
+        timer.scheduleAtFixedRate(updater, 0, 20);
+        timer.scheduleAtFixedRate(timeCounter, 0, 1000);
+    }
+
+    private void sendToRemote(Object o) {
+        try {
+            streamToRemote.writeObject(o);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void launchMultiPlayerThreads() {
+
+        localScore = 0.0;
+        scorer = new TimerTask() {
+            @Override
+            public void run() {
+                for (int i = 0; i < wordsList.size(); i++) {
+                    Word word = wordsList.get(i);
+                    if (word.getText().equalsIgnoreCase(game.getInput().getText())) {
+                        sendToRemote(word);
+                        removeWord(word);
+                        GameSound.POSITIVE.play();
+                        wordsList.remove(word);
+                        setLocalScore(String.format("%.0f", ++localScore));
+                        setInputField("");
+                        continue;
+                    }
+                }
+            }
+        };
+        initiateGameTask();
+        initiateTimeCounterTask();
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        sendToRemote("Ready");
+    }
+
+    private void startMultiPlayerGame() {
+        timer.scheduleAtFixedRate(scorer, 0, 20);
+        timer.scheduleAtFixedRate(updater, 0, 20);
+        timer.scheduleAtFixedRate(timeCounter, 0, 1000);
+    }
+
+    private void initiateTimeCounterTask() {
         gameTime = 30;
         timeCounter = new TimerTask() {
             @Override
@@ -164,16 +286,15 @@ public class GameDriver {
                 }
             }
         };
-
-        timer.scheduleAtFixedRate(updater, 0, 20);
-        timer.scheduleAtFixedRate(scorer, 0, 20);
-        timer.scheduleAtFixedRate(timeCounter, 0, 1000);
     }
 
     private void gameOver() {
         updater.cancel();
         scorer.cancel();
         //TODO: SHOW POPUP
+        if (gameMode == MULTIPLAYER) {
+            sendToRemote("GameOver");
+        }
         System.out.println("Game Over.");
     }
 

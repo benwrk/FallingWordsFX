@@ -4,11 +4,13 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+import java.io.Serializable;
+
 /**
  * @author Benjapol Worakan
  * @version 2015.11.12
  */
-public class Word extends Label {
+public class Word extends Label implements Serializable {
 
     public Word(String word) {
         setFont(new Font("System Bold", 15));

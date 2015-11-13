@@ -17,6 +17,7 @@ public class ConnectionManager {
     private static String serverIP;
     private static ObjectOutputStream streamToRemote;
     private static ObjectInputStream streamFromRemote;
+    private static Socket socketToRemote;
 
     public static ConnectionType getConnectionType() {
         return connectionType;
@@ -90,11 +91,11 @@ public class ConnectionManager {
 
         try {
             System.out.println("Client opening socket to " + serverIP + " at port " + ConfigManager.CFG.getLocalPort());
-            Socket socket = new Socket(serverIP, ConfigManager.CFG.getLocalPort());
+            socketToRemote = new Socket(serverIP, ConfigManager.CFG.getLocalPort());
 
-            streamToRemote = new ObjectOutputStream(socket.getOutputStream());
+            streamToRemote = new ObjectOutputStream(socketToRemote.getOutputStream());
             streamToRemote.writeObject("StartSync");
-            streamFromRemote = new ObjectInputStream(socket.getInputStream());
+            streamFromRemote = new ObjectInputStream(socketToRemote.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -104,13 +105,25 @@ public class ConnectionManager {
         try {
             ServerSocket serverSocket = new ServerSocket(ConfigManager.CFG.getLocalPort());
             System.out.println("Local server ready. Waiting for connection at port " + ConfigManager.CFG.getLocalPort());
-            Socket socket = serverSocket.accept();
-            streamToRemote = new ObjectOutputStream(socket.getOutputStream());
+            socketToRemote = serverSocket.accept();
+            streamToRemote = new ObjectOutputStream(socketToRemote.getOutputStream());
             streamToRemote.writeObject("StartSync");
-            streamFromRemote = new ObjectInputStream(socket.getInputStream());
+            streamFromRemote = new ObjectInputStream(socketToRemote.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Socket getSocketToRemote() {
+        return socketToRemote;
+    }
+
+    public static ObjectOutputStream getStreamToRemote() {
+        return streamToRemote;
+    }
+
+    public static ObjectInputStream getStreamFromRemote() {
+        return streamFromRemote;
     }
 
     private enum ConnectionType {
